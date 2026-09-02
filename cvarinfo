@@ -1,0 +1,76 @@
+// RS_Impacts -- CVars
+//
+// Shapes of light painted onto the surface you hit. Not decals, not actors and
+// not dynamic lights: the engine adds them inside the surface's own shading
+// pass (Level.SpawnSurfaceStamp -> func_surfacestamps.fp), so a ring crossing a
+// staircase climbs the steps and a shot into a corner wraps it.
+//
+// Nothing is written to the map and nothing is spawned, so there is nothing to
+// undo when you turn it off and nothing to leak if a script dies.
+
+// ---------------------------------------------------------------- master --
+server bool  rsi_enabled     = true;
+server int   rsi_preset      = 1;
+
+// ------------------------------------------------------------- what fires --
+// Each source is separate because they want completely different weights: a
+// death should be an event, a bullet should not.
+server bool  rsi_on_impact   = true;      // hitscan landing on a surface
+server bool  rsi_on_death    = true;      // something dying
+server bool  rsi_on_damage   = false;     // every hit that hurts an actor
+
+// One in N hitscans draws. 1 = every shot. A chaingun at every shot fills the
+// sixteen stamp slots in half a second and nothing else gets a look in.
+server int   rsi_impact_every = 3;
+
+// ------------------------------------------------------------------ shape --
+// 0 pool, 1 bar, 2 gouge, 3 ring, 4 hex field, 5 hex rings, 6 spiral,
+// 7 square rings, 8 star, 9 sunburst, 10 grid, 11 invert, 12 box.
+// -1 rolls a different one each time.
+server int   rsi_impact_shape = 3;
+server int   rsi_death_shape  = -1;
+
+// ------------------------------------------------------------- the layer --
+// The surface texture drawn under the shape. 0 none, 1 breathe, 2 band,
+// 3 checker, 4 trail, 5 trail up, 6 bars. -1 rolls.
+server int   rsi_impact_tex   = 0;
+server int   rsi_death_tex    = 0;
+server float rsi_tex_strength = 0.6;
+
+// ------------------------------------------------------------------ size --
+server float rsi_impact_size  = 64.0;     // map units the shape reaches
+server float rsi_death_size   = 160.0;
+
+// ------------------------------------------------------------------ life --
+// Tics. 35 is one second.
+server int   rsi_impact_life  = 25;
+server int   rsi_death_life   = 60;
+
+// ---------------------------------------------------------------- colour --
+// 0 fixed, 1 random per hit, 2 by damage type, 3 by how hard it hit.
+server int   rsi_color_mode   = 2;
+
+// Three plain sliders rather than a colour CVar with a picker widget. The
+// engine's own ColorPicker was tried twice in RS_GlowLanes: the menu worked and
+// the colour never reached the game. This is the same shape the original
+// Environmental_Lighting mods used and it is the interaction that actually
+// works.
+server int   rsi_color_r      = 255;
+server int   rsi_color_g      = 128;
+server int   rsi_color_b      = 48;
+
+// How far a rolled colour is allowed to wander, in degrees of hue around the
+// fixed colour above. 360 is anything.
+server float rsi_color_spread = 90.0;
+
+// ------------------------------------------------------------- behaviour --
+// Skip stamps on sky, where there is no real surface to paint and the shape
+// ends up floating on the skybox.
+server bool  rsi_skip_sky     = true;
+
+// How far to trace looking for the surface a hitscan landed on.
+server float rsi_trace_dist   = 8192.0;
+
+// Internal. The preset index last applied, so a preset only re-applies when
+// it CHANGES -- not on every map load, which used to wipe slider tweaks.
+server int   rsi_preset_applied = -1;

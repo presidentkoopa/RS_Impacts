@@ -1,0 +1,7 @@
+// RS_Impacts -- engine is UZDXREMA 5.0.0-rc.2; the surface-stamp natives
+// (Level.SpawnSurfaceStamp / ClearSurfaceStamps) are UZDXREMA-only, so there
+// is no older floor that works.
+version "4.12"
+
+#include "zscript/rsi_presets.zs"
+#include "zscript/rsi_handler.zs"

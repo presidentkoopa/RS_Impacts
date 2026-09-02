@@ -1,0 +1,153 @@
+OptionValue "RSI_Preset"
+{
+	0, "Restrained"
+	1, "Standard"
+	2, "Arcade"
+	3, "Sparks"
+	4, "Bloom"
+	5, "Grid"
+	6, "Elemental"
+	7, "Overload"
+}
+
+OptionValue "RSI_Shape"
+{
+	-1, "Roll each time"
+	 0, "Pool"
+	 1, "Bar"
+	 2, "Gouge"
+	 3, "Ring"
+	 4, "Hex field"
+	 5, "Hex rings"
+	 6, "Spiral"
+	 7, "Square rings"
+	 8, "Star"
+	 9, "Sunburst"
+	10, "Grid"
+	11, "Invert"
+	12, "Box"
+}
+
+OptionValue "RSI_Tex"
+{
+	-1, "Roll each time"
+	 0, "None"
+	 1, "Breathe"
+	 2, "Sweeping band"
+	 3, "Rotating checker"
+	 4, "Falling sparks"
+	 5, "Rising sparks"
+	 6, "Pulsing bars"
+}
+
+OptionValue "RSI_ColorMode"
+{
+	0, "Fixed"
+	1, "Random each hit"
+	2, "By damage type"
+	3, "By how hard it hit"
+}
+
+OptionValue "RSI_Every"
+{
+	1, "Every shot"
+	2, "Every 2nd"
+	3, "Every 3rd"
+	5, "Every 5th"
+	8, "Every 8th"
+}
+
+OptionMenu "RSIMain"
+{
+	Title "Impacts"
+	StaticText "Shapes of light painted onto the surface", "gray"
+	StaticText "you hit. Not decals and not lights - the", "gray"
+	StaticText "shape is drawn inside the surface's own", "gray"
+	StaticText "shading, so it follows stairs and slopes", "gray"
+	StaticText "and wraps around corners.", "gray"
+	StaticText ""
+	Option "Enabled", "rsi_enabled", "OnOff"
+	Option "Preset", "rsi_preset", "RSI_Preset"
+	StaticText "A preset overwrites the look, never the", "gold"
+	StaticText "switches below it.", "gold"
+	StaticText ""
+	Option "On shots landing", "rsi_on_impact", "OnOff"
+	Option "On something dying", "rsi_on_death", "OnOff"
+	Option "On every damaging hit", "rsi_on_damage", "OnOff"
+	StaticText "The last one is a lot. Try it with a pistol", "gray"
+	StaticText "before you try it with a chaingun.", "gray"
+	StaticText ""
+	Submenu "Shots", "RSIImpact"
+	Submenu "Deaths", "RSIDeath"
+	Submenu "Colour", "RSIColor"
+	Submenu "Advanced", "RSIAdvanced"
+}
+
+OptionMenu "RSIImpact"
+{
+	Title "Shots"
+	StaticText "What a hitscan landing on a wall, floor or", "gray"
+	StaticText "ceiling leaves behind.", "gray"
+	StaticText ""
+	Option "How often", "rsi_impact_every", "RSI_Every"
+	StaticText "Sixteen of these exist at once. Every shot", "gray"
+	StaticText "from a chaingun uses all of them and", "gray"
+	StaticText "crowds out deaths.", "gray"
+	StaticText ""
+	Option "Shape", "rsi_impact_shape", "RSI_Shape"
+	Option "Surface layer", "rsi_impact_tex", "RSI_Tex"
+	StaticText ""
+	Slider "Size", "rsi_impact_size", 8.0, 256.0, 8.0, 0
+	Slider "Lasts (tics)", "rsi_impact_life", 5, 140, 5, 0
+	StaticText "35 tics is one second.", "gray"
+}
+
+OptionMenu "RSIDeath"
+{
+	Title "Deaths"
+	StaticText "Drawn on the floor under whatever died,", "gray"
+	StaticText "not at its middle - a shape blooming out", "gray"
+	StaticText "of mid-air reads as a floating disc.", "gray"
+	StaticText ""
+	Option "Shape", "rsi_death_shape", "RSI_Shape"
+	Option "Surface layer", "rsi_death_tex", "RSI_Tex"
+	StaticText ""
+	Slider "Size", "rsi_death_size", 32.0, 512.0, 16.0, 0
+	Slider "Lasts (tics)", "rsi_death_life", 10, 210, 10, 0
+}
+
+OptionMenu "RSIColor"
+{
+	Title "Colour"
+	Option "Source", "rsi_color_mode", "RSI_ColorMode"
+	StaticText ""
+	StaticText "Fixed colour, and the centre that", "gray"
+	StaticText "'Random each hit' wanders around.", "gray"
+	Slider "Red", "rsi_color_r", 0, 255, 5, 0
+	Slider "Green", "rsi_color_g", 0, 255, 5, 0
+	Slider "Blue", "rsi_color_b", 0, 255, 5, 0
+	StaticText ""
+	Slider "Random spread", "rsi_color_spread", 0.0, 360.0, 15.0, 0
+	StaticText "How far a rolled colour may wander, in", "gray"
+	StaticText "degrees of hue. 360 is anything at all.", "gray"
+	StaticText ""
+	StaticText "Every shape keeps a white-hot centre", "gray"
+	StaticText "whatever the colour is. That is what makes", "gray"
+	StaticText "it read as light instead of as paint.", "gray"
+}
+
+OptionMenu "RSIAdvanced"
+{
+	Title "Advanced"
+	Slider "Surface layer strength", "rsi_tex_strength", 0.0, 1.0, 0.05, 2
+	StaticText "How strongly the second layer - the sparks,", "gray"
+	StaticText "band or checker - is drawn under the shape.", "gray"
+	StaticText ""
+	Option "Skip sky", "rsi_skip_sky", "OnOff"
+	StaticText "Sky is not a real surface. With this off,", "gray"
+	StaticText "shooting upward paints the skybox.", "gray"
+	StaticText ""
+	Slider "Trace distance", "rsi_trace_dist", 512.0, 16384.0, 512.0, 0
+	StaticText "How far to look for the surface a shot", "gray"
+	StaticText "landed on. Only raise it on huge maps.", "gray"
+}
