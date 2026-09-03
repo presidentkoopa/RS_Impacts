@@ -24,10 +24,10 @@ class RSI_Handler : EventHandler
 	const SHAPE_COUNT = 13;
 	const TEX_COUNT   = 7;
 
-	// The shapes worth rolling for a death. Deliberately not 0..12: pool is a
-	// blob, invert is a screen effect more than a shape, and bar and box are
-	// oriented, which reads as arbitrary when nothing gave them a direction.
-	static const int DeathRoll[] = { 3, 4, 5, 6, 7, 8, 9, 10 };
+	// The shapes worth rolling. Deliberately not 0..12: pool is a blob, invert
+	// is a screen effect more than a shape, and bar and box are oriented, which
+	// reads as arbitrary when nothing gave them a direction.
+	static const int ShapeRoll[] = { 3, 4, 5, 6, 7, 8, 9, 10 };
 
 	private int impactCounter;
 
@@ -111,42 +111,14 @@ class RSI_Handler : EventHandler
 			PickColor(e.DamageType, 0));
 	}
 
-	// Something died. The stamp goes on the floor under it rather than at its
-	// centre -- a shape blooming from mid-air reads as a floating disc, and the
-	// floor is where a body ends up anyway.
-	override void WorldThingDied(WorldEvent e)
-	{
-		if (!Enabled() || !RSI_Util.GetB("rsi_on_death", true)) return;
-		if (!e || !e.Thing || e.Thing.player) return;
-
-		Actor t = e.Thing;
-		Vector3 at = (t.pos.x, t.pos.y, t.floorz);
-
-		Stamp(at, (0, 0, 0),
-			ShapeFor("rsi_death_shape"),
-			TexFor("rsi_death_tex"),
-			RSI_Util.GetF("rsi_death_size", 160.0),
-			RSI_Util.GetI("rsi_death_life", 60),
-			PickColor(e.DamageType, 0));
-	}
-
-	// Every hit that actually hurt something. Off by default: at a chaingun's
-	// rate this is the same flood the impact throttle exists to prevent, and
-	// the two together would leave nothing but damage flashes on screen.
-	override void WorldThingDamaged(WorldEvent e)
-	{
-		if (!Enabled() || !RSI_Util.GetB("rsi_on_damage", false)) return;
-		if (!e || !e.Thing || e.Damage <= 0) return;
-
-		Vector3 at = (e.Thing.pos.x, e.Thing.pos.y, e.Thing.floorz);
-
-		Stamp(at, (0, 0, 0),
-			ShapeFor("rsi_impact_shape"),
-			TexFor("rsi_impact_tex"),
-			RSI_Util.GetF("rsi_impact_size", 64.0) * 0.7,
-			RSI_Util.GetI("rsi_impact_life", 25),
-			PickColor(e.DamageType, e.Damage));
-	}
+	// DEATHS AND DAMAGE ARE NOT THIS MOD'S JOB.
+	//
+	// This used to hook WorldThingDied and WorldThingDamaged as well. It was
+	// wrong by its own name: an impact is a shot landing on a SURFACE, and a
+	// body dying in the middle of a room is not that. Deaths belong to
+	// RS_DeathFX, which is a whole vocabulary of its own -- silhouettes,
+	// tiers, the detector sweep -- and which would otherwise be fighting this
+	// mod for the sixteen stamp slots on every single kill.
 
 	// ---- decisions ---------------------------------------------------------
 
@@ -169,7 +141,7 @@ class RSI_Handler : EventHandler
 	{
 		int s = RSI_Util.GetI(cv, 3);
 		if (s >= 0) return clamp(s, 0, SHAPE_COUNT - 1);
-		return DeathRoll[random(0, DeathRoll.Size() - 1)];
+		return ShapeRoll[random(0, ShapeRoll.Size() - 1)];
 	}
 
 	int TexFor(String cv)

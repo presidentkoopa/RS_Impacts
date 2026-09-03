@@ -13,11 +13,9 @@ server bool  rsi_enabled     = true;
 server int   rsi_preset      = 1;
 
 // ------------------------------------------------------------- what fires --
-// Each source is separate because they want completely different weights: a
-// death should be an event, a bullet should not.
+// One source: a shot landing on a surface. Deaths were here once and are now
+// RS_DeathFX's job -- see the note in rsi_handler.zs.
 server bool  rsi_on_impact   = true;      // hitscan landing on a surface
-server bool  rsi_on_death    = true;      // something dying
-server bool  rsi_on_damage   = false;     // every hit that hurts an actor
 
 // One in N hitscans draws. 1 = every shot. A chaingun at every shot fills the
 // sixteen stamp slots in half a second and nothing else gets a look in.
@@ -28,23 +26,19 @@ server int   rsi_impact_every = 3;
 // 7 square rings, 8 star, 9 sunburst, 10 grid, 11 invert, 12 box.
 // -1 rolls a different one each time.
 server int   rsi_impact_shape = 3;
-server int   rsi_death_shape  = -1;
 
 // ------------------------------------------------------------- the layer --
 // The surface texture drawn under the shape. 0 none, 1 breathe, 2 band,
 // 3 checker, 4 trail, 5 trail up, 6 bars. -1 rolls.
 server int   rsi_impact_tex   = 0;
-server int   rsi_death_tex    = 0;
 server float rsi_tex_strength = 0.6;
 
 // ------------------------------------------------------------------ size --
 server float rsi_impact_size  = 64.0;     // map units the shape reaches
-server float rsi_death_size   = 160.0;
 
 // ------------------------------------------------------------------ life --
 // Tics. 35 is one second.
 server int   rsi_impact_life  = 25;
-server int   rsi_death_life   = 60;
 
 // ---------------------------------------------------------------- colour --
 // 0 fixed, 1 random per hit, 2 by damage type, 3 by how hard it hit.

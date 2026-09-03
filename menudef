@@ -71,14 +71,9 @@ OptionMenu "RSIMain"
 	StaticText "A preset overwrites the look, never the", "gold"
 	StaticText "switches below it.", "gold"
 	StaticText ""
-	Option "On shots landing", "rsi_on_impact", "OnOff"
-	Option "On something dying", "rsi_on_death", "OnOff"
-	Option "On every damaging hit", "rsi_on_damage", "OnOff"
-	StaticText "The last one is a lot. Try it with a pistol", "gray"
-	StaticText "before you try it with a chaingun.", "gray"
+	Option "Enabled on shots landing", "rsi_on_impact", "OnOff"
 	StaticText ""
 	Submenu "Shots", "RSIImpact"
-	Submenu "Deaths", "RSIDeath"
 	Submenu "Colour", "RSIColor"
 	Submenu "Advanced", "RSIAdvanced"
 }
@@ -100,20 +95,6 @@ OptionMenu "RSIImpact"
 	Slider "Size", "rsi_impact_size", 8.0, 256.0, 8.0, 0
 	Slider "Lasts (tics)", "rsi_impact_life", 5, 140, 5, 0
 	StaticText "35 tics is one second.", "gray"
-}
-
-OptionMenu "RSIDeath"
-{
-	Title "Deaths"
-	StaticText "Drawn on the floor under whatever died,", "gray"
-	StaticText "not at its middle - a shape blooming out", "gray"
-	StaticText "of mid-air reads as a floating disc.", "gray"
-	StaticText ""
-	Option "Shape", "rsi_death_shape", "RSI_Shape"
-	Option "Surface layer", "rsi_death_tex", "RSI_Tex"
-	StaticText ""
-	Slider "Size", "rsi_death_size", 32.0, 512.0, 16.0, 0
-	Slider "Lasts (tics)", "rsi_death_life", 10, 210, 10, 0
 }
 
 OptionMenu "RSIColor"
